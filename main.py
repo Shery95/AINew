@@ -9,6 +9,10 @@ import streamlit as st
 import whisper
 import tempfile
 import os
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
 
 st.title("AI Audio Transcribe")
 
@@ -28,17 +32,26 @@ if st.sidebar.button("Transcribe Audio"):
 
         # Specify the path to ffmpeg
         ffmpeg_path = "/opt/homebrew/bin/ffmpeg"  # Update this with your correct path
+        logging.debug(f"ffmpeg path: {ffmpeg_path}")
 
-        # Transcribe audio, passing the ffmpeg_path
-        transcription = model.transcribe(audio_path, ffmpeg_path=ffmpeg_path)
+        try:
+            # Transcribe audio, passing the ffmpeg_path
+            transcription = model.transcribe(audio_path, ffmpeg_path=ffmpeg_path)
+            logging.debug(f"Transcription result: {transcription}")
 
-        # Remove the temporary audio file
-        os.remove(audio_path)
+            # Display the transcribed text
+            st.write(transcription["text"])
 
-        st.sidebar.success("Transcription Complete")
+        except Exception as e:
+            logging.error(f"Error during transcription: {e}")
+            st.error("An error occurred during transcription. Please check the logs for details.")
 
-        # Display the transcribed text
-        st.write(transcription["text"])
+        finally:
+            # Remove the temporary audio file
+            os.remove(audio_path)
+
+            st.sidebar.success("Transcription Complete")
+
     else:
         st.sidebar.error("Please upload an audio file")
 
