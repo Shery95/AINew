@@ -1,10 +1,3 @@
-# Install dependencies
-# Linux: sudo apt update && sudo apt install ffmpeg
-# MacOS: brew install ffmpeg
-# Windows: choco install ffmpeg
-# Installing pytorch: conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia
-# Installing Whisper: pip install git+https://github.com/openai/whisper.git -q
-# pip install streamlit
 import streamlit as st
 import whisper
 import tempfile
@@ -30,13 +23,15 @@ if st.sidebar.button("Transcribe Audio"):
             temp_audio.write(audio_file.read())
             audio_path = temp_audio.name
 
-        # Specify the path to ffmpeg
-        ffmpeg_path = "/opt/homebrew/bin/ffmpeg"  # Update this with your correct path
-        logging.debug(f"ffmpeg path: {ffmpeg_path}")
+        # Specify the directory containing ffmpeg
+        ffmpeg_dir = "/opt/homebrew/bin/"
 
+        # Update the system's PATH to include the ffmpeg directory
+        os.environ['PATH'] += os.pathsep + ffmpeg_dir
+
+        # Transcribe audio, passing the ffmpeg_path
         try:
-            # Transcribe audio, passing the ffmpeg_path
-            transcription = model.transcribe(audio_path, ffmpeg_path=ffmpeg_path)
+            transcription = model.transcribe(audio_path)
             logging.debug(f"Transcription result: {transcription}")
 
             # Display the transcribed text
