@@ -1,20 +1,9 @@
 # Install dependencies
-
-# Linux
-# sudo apt update && sudo apt install ffmpeg
-
-# MacOS
-# brew install ffmpeg
-
-# Windows
-# chco install ffmpeg
-
-# Installing pytorch
-# conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia
-
-# Installing Whisper
-# pip install git+https://github.com/openai/whisper.git -q
-
+# Linux: sudo apt update && sudo apt install ffmpeg
+# MacOS: brew install ffmpeg
+# Windows: choco install ffmpeg
+# Installing pytorch: conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia
+# Installing Whisper: pip install git+https://github.com/openai/whisper.git -q
 # pip install streamlit
 import streamlit as st
 import whisper
@@ -37,8 +26,11 @@ if st.sidebar.button("Transcribe Audio"):
             temp_audio.write(audio_file.read())
             audio_path = temp_audio.name
 
-        # Transcribe audio
-        transcription = model.transcribe(audio_path)
+        # Specify the path to ffmpeg
+        ffmpeg_path = "/opt/homebrew/bin/ffmpeg"  # Update this with your correct path
+
+        # Transcribe audio, passing the ffmpeg_path
+        transcription = model.transcribe(audio_path, ffmpeg_path=ffmpeg_path)
 
         # Remove the temporary audio file
         os.remove(audio_path)
