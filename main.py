@@ -23,12 +23,6 @@ if st.sidebar.button("Transcribe Audio"):
             temp_audio.write(audio_file.read())
             audio_path = temp_audio.name
 
-        # Specify the directory containing ffmpeg
-        ffmpeg_dir = "/opt/homebrew/bin/"
-
-        # Update the system's PATH to include the ffmpeg directory
-        os.environ['PATH'] += os.pathsep + ffmpeg_dir
-
         # Transcribe audio, passing the ffmpeg_path
         try:
             transcription = model.transcribe(audio_path)
@@ -52,3 +46,4 @@ if st.sidebar.button("Transcribe Audio"):
 
 st.sidebar.header("Play Original Audio File")
 st.sidebar.audio(audio_file)
+
